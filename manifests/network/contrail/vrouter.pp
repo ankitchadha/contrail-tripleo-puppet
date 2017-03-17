@@ -287,16 +287,19 @@ class tripleo::network::contrail::vrouter (
       },
       vnc_api_lib_config     => $vnc_api_lib_config,
     }
-  if $step >= 5 {
-    class {'::contrail::vrouter::provision_vrouter':
-      api_address                => $api_server,
-      api_port                   => $api_port,
-      host_ip                    => $host_ip,
-      node_name                  => $::hostname,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-      is_tsn                     => $is_tsn,
-    }
+  if $step >=2 {
+    include contrail::vrouter::contrailctl
   }
+#  if $step >= 5 {
+#    class {'::contrail::vrouter::provision_vrouter':
+#      api_address                => $api_server,
+#      api_port                   => $api_port,
+#      host_ip                    => $host_ip,
+#      node_name                  => $::hostname,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#      is_tsn                     => $is_tsn,
+#    }
+#  }
 }

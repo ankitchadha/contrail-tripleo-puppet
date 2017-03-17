@@ -78,19 +78,19 @@ class tripleo::network::contrail::provision(
   $api_server = hiera('internal_api_virtual_ip'),
 )
 {
-  if $step >= 5 {
-    class {'::contrail::control::provision_control':
-      api_address                => $api_server,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-    }
-    class {'::contrail::control::provision_linklocal':
-      api_address                => $api_server,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-      ipfabric_service_ip        => $api_server,
-    }
-  }
+#  if $step >= 5 {
+#    class {'::contrail::control::provision_control':
+#      api_address                => $api_server,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#    }
+#    class {'::contrail::control::provision_linklocal':
+#      api_address                => $api_server,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#      ipfabric_service_ip        => $api_server,
+#    }
+#  }
 }

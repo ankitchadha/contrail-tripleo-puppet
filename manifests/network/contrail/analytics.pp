@@ -372,16 +372,19 @@ class tripleo::network::contrail::analytics(
       },
     }
   }
-  if $step >= 5 {
-    class {'::contrail::analytics::provision_analytics':
-      api_address                => $api_server,
-      api_port                   => $api_port,
-      analytics_node_address     => $host_ip,
-      analytics_node_name        => $::fqdn,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-      openstack_vip              => $public_vip,
-    }
+  if $step >=2 {
+    include contrail::analytics::contrailctl
   }
+#  if $step >= 5 {
+#    class {'::contrail::analytics::provision_analytics':
+#      api_address                => $api_server,
+#      api_port                   => $api_port,
+#      analytics_node_address     => $host_ip,
+#      analytics_node_name        => $::fqdn,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#      openstack_vip              => $public_vip,
+#    }
+#  }
 }

@@ -151,16 +151,19 @@ class tripleo::network::contrail::database(
       }
     }
   }
-  if $step >= 5 {
-    class {'::contrail::database::provision_database':
-      api_address                => $api_server,
-      api_port                   => $api_port,
-      database_node_address      => $host_ip,
-      database_node_name         => $host_name,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-      openstack_vip              => $public_vip,
-    }
+  if $step >=2 {
+    include contrail::database::contrailctl
   }
+#  if $step >= 5 {
+#    class {'::contrail::database::provision_database':
+#      api_address                => $api_server,
+#      api_port                   => $api_port,
+#      database_node_address      => $host_ip,
+#      database_node_name         => $host_name,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#      openstack_vip              => $public_vip,
+#    }
+#  }
 }

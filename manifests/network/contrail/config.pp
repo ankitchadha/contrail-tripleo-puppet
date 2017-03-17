@@ -312,6 +312,9 @@ class tripleo::network::contrail::config(
       },
     }
   }
+  if $step >=2 {
+    include contrail::config::contrailctl
+  }
   if $step >= 3 {
     class {'::contrail::config':
       api_config              => {
@@ -397,30 +400,30 @@ class tripleo::network::contrail::config(
       vnc_api_lib_config      => $vnc_api_lib_config,
     }
   }
-  if $step >= 5 {
-    class {'::contrail::config::provision_config':
-      api_address                => $api_server,
-      api_port                   => $api_port,
-      config_node_address        => $host_ip,
-      config_node_name           => $::hostname,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-      openstack_vip              => $public_vip,
-    }
-    if $config_hostnames[0] == $::hostname {
-      class {'::contrail::config::provision_linklocal':
-        api_address                => $api_server,
-        api_port                   => $api_port,
-        ipfabric_service_ip        => $api_server,
-        ipfabric_service_port      => $ipfabric_service_port,
-        keystone_admin_user        => $admin_user,
-        keystone_admin_password    => $admin_password,
-        keystone_admin_tenant_name => $admin_tenant_name,
-        linklocal_service_name     => $linklocal_service_name,
-        linklocal_service_ip       => $linklocal_service_ip,
-        linklocal_service_port     => $linklocal_service_port,
-      }
-    }
-  }
+#  if $step >= 5 {
+#    class {'::contrail::config::provision_config':
+#      api_address                => $api_server,
+#      api_port                   => $api_port,
+#      config_node_address        => $host_ip,
+#      config_node_name           => $::hostname,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#      openstack_vip              => $public_vip,
+#    }
+#    if $config_hostnames[0] == $::hostname {
+#      class {'::contrail::config::provision_linklocal':
+#        api_address                => $api_server,
+#        api_port                   => $api_port,
+#        ipfabric_service_ip        => $api_server,
+#        ipfabric_service_port      => $ipfabric_service_port,
+#        keystone_admin_user        => $admin_user,
+#        keystone_admin_password    => $admin_password,
+#        keystone_admin_tenant_name => $admin_tenant_name,
+#        linklocal_service_name     => $linklocal_service_name,
+#        linklocal_service_ip       => $linklocal_service_ip,
+#        linklocal_service_port     => $linklocal_service_port,
+#      }
+#    }
+#  }
 }

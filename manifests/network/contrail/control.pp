@@ -150,6 +150,9 @@ class tripleo::network::contrail::control(
   $dns_ifmap_user         = "${ifmap_username}.dns"
   $dns_ifmap_password     = "${ifmap_username}.dns"
 
+#  if $step >=2 {
+#    include contrail::control::contrailctl
+#  }
   if $step >= 3 {
     class {'::contrail::control':
       secret                 => $secret,
@@ -188,17 +191,17 @@ class tripleo::network::contrail::control(
       },
     }
   }
-  if $step >= 5 {
-    class {'::contrail::control::provision_control':
-      api_address                => $api_server,
-      api_port                   => $api_port,
-      control_node_address       => $host_ip,
-      control_node_name          => $::hostname,
-      ibgp_auto_mesh             => $ibgp_auto_mesh,
-      keystone_admin_user        => $admin_user,
-      keystone_admin_password    => $admin_password,
-      keystone_admin_tenant_name => $admin_tenant_name,
-      router_asn                 => $router_asn,
-    }
-  }
+#  if $step >= 5 {
+#    class {'::contrail::control::provision_control':
+#      api_address                => $api_server,
+#      api_port                   => $api_port,
+#      control_node_address       => $host_ip,
+#      control_node_name          => $::hostname,
+#      ibgp_auto_mesh             => $ibgp_auto_mesh,
+#      keystone_admin_user        => $admin_user,
+#      keystone_admin_password    => $admin_password,
+#      keystone_admin_tenant_name => $admin_tenant_name,
+#      router_asn                 => $router_asn,
+#    }
+#  }
 }
