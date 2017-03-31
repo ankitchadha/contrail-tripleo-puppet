@@ -49,6 +49,9 @@
 #  (optional) VIP of Config API
 #  String (IPv4) value.
 #  Defaults to hiera('internal_api_virtual_ip')
+#  
+#  [*api_server_new*]
+#  (optional) IP of the new CFGM node (ISSU case)
 #
 # [*api_port*]
 #  (optional) Port of Config API
@@ -222,7 +225,7 @@ class tripleo::network::contrail::confignew(
   $admin_tenant_name      = hiera('contrail::admin_tenant_name'),
   $admin_token            = hiera('contrail::admin_token'),
   $admin_user             = hiera('contrail::admin_user'),
-  $api_server             = hiera('internal_api_virtual_ip'),
+  $api_server_new         = hiera('contrail::confignew::host_ip'), # We should attach to  any of the new CFGM nodes
   $api_port               = hiera('contrail::api_port'),
   $auth                   = hiera('contrail::auth'),
   $auth_host              = hiera('contrail::auth_host'),
@@ -313,7 +316,7 @@ class tripleo::network::contrail::confignew(
     }
   }
   if $step >= 3 {
-    class {'::contrail::config':
+    class {'::contrail::confignew':
       api_config              => {
         'DEFAULTS' => {
           'aaa_mode'              => $aaa_mode,
@@ -341,7 +344,7 @@ class tripleo::network::contrail::confignew(
       },
       device_manager_config   => {
         'DEFAULTS' => {
-          'api_server_ip'         => $api_server,
+          'api_server_ip'         => $api_server_new,
           'api_server_port'       => $api_port,
           'cassandra_server_list' => $cassandra_server_list_9160,
           'disc_server_ip'        => $disc_server_ip,
@@ -362,7 +365,7 @@ class tripleo::network::contrail::confignew(
       keystone_config         => $keystone_config,
       schema_config           => {
         'DEFAULTS' => {
-          'api_server_ip'         => $api_server,
+          'api_server_ip'         => $api_server_new,
           'api_server_port'       => $api_port,
           'cassandra_server_list' => $cassandra_server_list_9160,
           'disc_server_ip'        => $disc_server_ip,
@@ -379,7 +382,7 @@ class tripleo::network::contrail::confignew(
       },
       svc_monitor_config      => {
         'DEFAULTS' => {
-          'api_server_ip'         => $api_server,
+          'api_server_ip'         => $api_server_new,
           'api_server_port'       => $api_port,
           'cassandra_server_list' => $cassandra_server_list_9160,
           'disc_server_ip'        => $disc_server_ip,
@@ -398,8 +401,8 @@ class tripleo::network::contrail::confignew(
     }
   }
   if $step >= 5 {
-    class {'::contrail::config::provision_config':
-      api_address                => $api_server,
+    class {'::contrail::confignew::provision_config':
+      api_address                => $api_server_new,
       api_port                   => $api_port,
       config_node_address        => $host_ip,
       config_node_name           => $::hostname,
@@ -409,10 +412,10 @@ class tripleo::network::contrail::confignew(
       openstack_vip              => $public_vip,
     }
     if $config_hostnames[0] == $::hostname {
-      class {'::contrail::config::provision_linklocal':
-        api_address                => $api_server,
+      class {'::contrail::confignew::provision_linklocal':
+        api_address                => $api_server_new,
         api_port                   => $api_port,
-        ipfabric_service_ip        => $api_server,
+        ipfabric_service_ip        => $api_server_new,
         ipfabric_service_port      => $ipfabric_service_port,
         keystone_admin_user        => $admin_user,
         keystone_admin_password    => $admin_password,

@@ -127,7 +127,7 @@ class tripleo::network::contrail::controlnew(
   $admin_tenant_name = hiera('contrail::admin_tenant_name'),
   $admin_token       = hiera('contrail::admin_token'),
   $admin_user        = hiera('contrail::admin_user'),
-  $api_server        = hiera('internal_api_virtual_ip'),
+  $api_server_new    = hiera('contrail::controlnew::host_ip'),
   $api_port          = hiera('contrail::api_port'),
   $auth_host         = hiera('contrail::auth_host'),
   $auth_port         = hiera('contrail::auth_port'),
@@ -151,7 +151,7 @@ class tripleo::network::contrail::controlnew(
   $dns_ifmap_password     = "${ifmap_username}.dns"
 
   if $step >= 3 {
-    class {'::contrail::control':
+    class {'::contrail::controlnew':
       secret                 => $secret,
       control_config         => {
         'DEFAULT'   => {
@@ -189,8 +189,8 @@ class tripleo::network::contrail::controlnew(
     }
   }
   if $step >= 5 {
-    class {'::contrail::control::provision_control':
-      api_address                => $api_server,
+    class {'::contrail::controlnew::provision_control':
+      api_address                => $api_server_new,
       api_port                   => $api_port,
       control_node_address       => $host_ip,
       control_node_name          => $::hostname,

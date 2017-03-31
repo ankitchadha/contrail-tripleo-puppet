@@ -194,7 +194,7 @@ class tripleo::network::contrail::analyticsnew(
   $admin_tenant_name          = hiera('contrail::admin_tenant_name'),
   $admin_token                = hiera('contrail::admin_token'),
   $admin_user                 = hiera('contrail::admin_user'),
-  $api_server                 = hiera('internal_api_virtual_ip'),
+  $api_server_new             = hiera('contrail_config_new_node_ips'),
   $api_port                   = hiera('contrail::api_port'),
   $auth_host                  = hiera('contrail::auth_host'),
   $auth_port                  = hiera('contrail::auth_port'),
@@ -270,7 +270,7 @@ class tripleo::network::contrail::analyticsnew(
     }
   }
   if $step >= 3 {
-    class {'::contrail::analytics':
+    class {'::contrail::analyticsnew':
       alarm_gen_config         => {
         'DEFAULTS'  => {
           'host_ip'              => $host_ip,
@@ -373,8 +373,8 @@ class tripleo::network::contrail::analyticsnew(
     }
   }
   if $step >= 5 {
-    class {'::contrail::analytics::provision_analytics':
-      api_address                => $api_server,
+    class {'::contrail::analyticsnew::provision_analytics':
+      api_address                => $api_server_new,
       api_port                   => $api_port,
       analytics_node_address     => $host_ip,
       analytics_node_name        => $::fqdn,
