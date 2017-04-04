@@ -109,11 +109,11 @@ class tripleo::network::contrail::databasenew(
   $admin_tenant_name    = hiera('contrail::admin_tenant_name'),
   $admin_token          = hiera('contrail::admin_token'),
   $admin_user           = hiera('contrail::admin_user'),
-  $api_server           = hiera('internal_api_virtual_ip'),
+  $api_server_new       = hiera('contrail_config_new_node_ips'),
   $api_port             = hiera('contrail::api_port'),
   $auth_host            = hiera('contrail::auth_host'),
   $cassandra_servers    = hiera('contrail_database_new_node_ips'),
-  $disc_server_ip       = hiera('internal_api_virtual_ip'),
+  $disc_server_ip       = hiera('contrail::confignew::host_ip'),
   $disc_server_port     = hiera('contrail::disc_server_port'),
   $host_ip              = hiera('contrail::databasenew::host_ip'),
   $host_name            = $::hostname,
@@ -124,10 +124,10 @@ class tripleo::network::contrail::databasenew(
 )
 {
   if $step == 2 {
-    class {'::contrail::database':
+    class {'::contrail::databasenew':
       database_params => {
         'auth_host'             => $auth_host,
-        'api_server'            => $api_server,
+        'api_server'            => $api_server_new,
         'admin_password'        => $admin_password,
         'admin_tenant_name'     => $admin_tenant_name,
         'admin_token'           => $admin_token,
@@ -152,8 +152,8 @@ class tripleo::network::contrail::databasenew(
     }
   }
   if $step >= 5 {
-    class {'::contrail::database::provision_database':
-      api_address                => $api_server,
+    class {'::contrail::databasenew::provision_database':
+      api_address                => $api_server_new,
       api_port                   => $api_port,
       database_node_address      => $host_ip,
       database_node_name         => $host_name,

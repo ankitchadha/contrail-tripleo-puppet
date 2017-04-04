@@ -206,7 +206,7 @@ class tripleo::network::contrail::analyticsnew(
   $cert_file                  = hiera('contrail::service_certificate',false),
   $collector_http_server_port = hiera('contrail::analyticsnew::collector_http_server_port'),
   $collector_sandesh_port     = hiera('contrail::analyticsnew::collector_sandesh_port'),
-  $disc_server_ip             = hiera('internal_api_virtual_ip'),
+  $disc_server_ip             = hiera('contrail::confignew::host_ip'),
   $disc_server_port           = hiera('contrail::disc_server_port'),
   $http_server_port           = hiera('contrail::analyticsnew::http_server_port'),
   $host_ip                    = hiera('contrail::analyticsnew::host_ip'),

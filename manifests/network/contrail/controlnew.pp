@@ -132,7 +132,7 @@ class tripleo::network::contrail::controlnew(
   $auth_host         = hiera('contrail::auth_host'),
   $auth_port         = hiera('contrail::auth_port'),
   $auth_protocol     = hiera('contrail::auth_protocol'),
-  $disc_server_ip    = hiera('internal_api_virtual_ip'),
+  $disc_server_ip    = hiera('contrail::confignew::host_ip'),
   $disc_server_port  = hiera('contrail::disc_server_port'),
   $host_ip           = hiera('contrail::controlnew::host_ip'),
   $ibgp_auto_mesh    = true,

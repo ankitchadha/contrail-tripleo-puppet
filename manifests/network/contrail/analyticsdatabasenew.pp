@@ -133,7 +133,7 @@ class tripleo::network::contrail::analyticsdatabasenew(
   $cassandra_servers    = hiera('contrail_analytics_database_new_node_ips'),
   $ca_file              = hiera('contrail::service_certificate',false),
   $cert_file            = hiera('contrail::service_certificate',false),
-  $disc_server_ip       = hiera('internal_api_virtual_ip'),
+  $disc_server_ip       = hiera('contrail::confignew::host_ip'),
   $disc_server_port     = hiera('contrail::disc_server_port'),
   $host_ip              = hiera('contrail::analytics::databasenew::host_ip'),
   $host_name            = $::hostname,

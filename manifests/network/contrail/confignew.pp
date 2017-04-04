@@ -237,7 +237,7 @@ class tripleo::network::contrail::confignew(
   $cert_file              = hiera('contrail::service_certificate',false),
   $config_hostnames       = hiera('contrail_config_new_short_node_names'),
   $control_server_list    = hiera('contrail_control_new_node_ips'),
-  $disc_server_ip         = hiera('internal_api_virtual_ip'),
+  $disc_server_ip         = hiera('contrail::confignew::host_ip'),
   $disc_server_port       = hiera('contrail::disc_server_port'),
   $host_ip                = hiera('contrail::confignew::host_ip'),
   $ifmap_password         = hiera('contrail::confignew::ifmap_password'),
