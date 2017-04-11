@@ -105,30 +105,33 @@
 #  Defaults to '127.0.0.1'
 #
 class tripleo::network::contrail::webuinew(
-  $admin_password            = hiera('contrail::admin_password'),
-  $admin_tenant_name         = hiera('contrail::admin_tenant_name'),
-  $admin_token               = hiera('contrail::admin_token'),
-  $admin_user                = hiera('contrail::admin_user'),
-  $auth_host                 = hiera('contrail::auth_host'),
-  $auth_protocol             = hiera('contrail::auth_protocol'),
-  $auth_port_public          = hiera('contrail::auth_port_public'),
-  $auth_port_ssl_public      = hiera('contrail::auth_port_ssl_public'),
-  $cassandra_server_list     = hiera('contrail_database_new_node_ips'),
-  $cert_file                 = hiera('contrail::service_certificate',false),
-  $contrail_analytics_vip    = hiera('internal_api_virtual_ip'),
-  $contrail_config_vip       = hiera('internal_api_virtual_ip'),
-  $contrail_webui_http_port  = hiera('contrail::webuinew::http_port'),
-  $contrail_webui_https_port = hiera('contrail::webuinew::https_port'),
-  $neutron_vip               = hiera('internal_api_virtual_ip'),
-  $redis_ip                  = hiera('contrail::webuinew::redis_ip'),
+  $admin_password                 = hiera('contrail::admin_password'),
+  $admin_tenant_name              = hiera('contrail::admin_tenant_name'),
+  $admin_token                    = hiera('contrail::admin_token'),
+  $admin_user                     = hiera('contrail::admin_user'),
+  $auth_host                      = hiera('contrail::auth_host'),
+  $auth_protocol                  = hiera('contrail::auth_protocol'),
+  $auth_port_public               = hiera('contrail::auth_port_public'),
+  $auth_port_ssl_public           = hiera('contrail::auth_port_ssl_public'),
+  $cassandra_server_list          = hiera('contrail_database_new_node_ips'),
+  $cert_file                      = hiera('contrail::service_certificate',false),
+  $contrail_analytics_vip_list    = hiera('contrail_analytics_new_node_ips'),
+  $contrail_config_vip_list       = hiera('contrail_config_new_node_ips'),
+  $contrail_webui_http_port       = hiera('contrail::webuinew::http_port'),
+  $contrail_webui_https_port      = hiera('contrail::webuinew::https_port'),
+  $neutron_vip_list               = hiera('contrail_config_new_node_ips'),
+  $redis_ip                       = hiera('contrail::webuinew::redis_ip'),
 )
 {
+  $contrail_analytics_vip = $contrail_analytics_vip_list[0]
+  $neutron_vip = $neutron_vip_list[0]
+  $contrail_config_vip =   $contrail_config_vip_list[0]
   if $auth_protocol == 'https' {
     $auth_port = $auth_port_ssl_public
   } else {
     $auth_port = $auth_port_public
   }
-  class {'::contrail::webui':
+  class {'::contrail::webuinew':
     admin_user                => $admin_user,
     admin_password            => $admin_password,
     admin_token               => $admin_token,

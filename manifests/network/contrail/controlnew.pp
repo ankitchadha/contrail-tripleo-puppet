@@ -122,29 +122,31 @@
 #  Defaults to hiera('step')
 #
 class tripleo::network::contrail::controlnew(
-  $step              = hiera('step'),
-  $admin_password    = hiera('contrail::admin_password'),
-  $admin_tenant_name = hiera('contrail::admin_tenant_name'),
-  $admin_token       = hiera('contrail::admin_token'),
-  $admin_user        = hiera('contrail::admin_user'),
-  $api_server_new    = hiera('contrail::controlnew::host_ip'),
-  $api_port          = hiera('contrail::api_port'),
-  $auth_host         = hiera('contrail::auth_host'),
-  $auth_port         = hiera('contrail::auth_port'),
-  $auth_protocol     = hiera('contrail::auth_protocol'),
-  $disc_server_ip    = hiera('contrail::confignew::host_ip'),
-  $disc_server_port  = hiera('contrail::disc_server_port'),
-  $host_ip           = hiera('contrail::controlnew::host_ip'),
-  $ibgp_auto_mesh    = true,
-  $ifmap_password    = hiera('contrail::controlnew::host_ip'),
-  $ifmap_username    = hiera('contrail::controlnew::host_ip'),
-  $insecure          = hiera('contrail::insecure'),
-  $memcached_servers = hiera('contrail::memcached_server'),
-  $public_vip        = hiera('public_virtual_ip'),
-  $router_asn        = hiera('contrail::controlnew::asn'),
-  $secret            = hiera('contrail::controlnew::rndc_secret'),
+  $step                  = hiera('step'),
+  $admin_password        = hiera('contrail::admin_password'),
+  $admin_tenant_name     = hiera('contrail::admin_tenant_name'),
+  $admin_token           = hiera('contrail::admin_token'),
+  $admin_user            = hiera('contrail::admin_user'),
+  $api_server_new_list   = hiera('contrail_config_new_node_ips'),
+  $api_port              = hiera('contrail::api_port'),
+  $auth_host             = hiera('contrail::auth_host'),
+  $auth_port             = hiera('contrail::auth_port'),
+  $auth_protocol         = hiera('contrail::auth_protocol'),
+  $disc_server_ip_list   = hiera('contrail_config_new_node_ips'),
+  $disc_server_port      = hiera('contrail::disc_server_port'),
+  $host_ip               = hiera('contrail::controlnew::host_ip'),
+  $ibgp_auto_mesh        = true,
+  $ifmap_password        = hiera('contrail::controlnew::host_ip'),
+  $ifmap_username        = hiera('contrail::controlnew::host_ip'),
+  $insecure              = hiera('contrail::insecure'),
+  $memcached_servers     = hiera('contrail::memcached_server'),
+  $public_vip            = hiera('public_virtual_ip'),
+  $router_asn            = hiera('contrail::controlnew::asn'),
+  $secret                = hiera('contrail::controlnew::rndc_secret'),
 )
 {
+  $api_server_new         = $api_server_new_list[0]
+  $disc_server_ip         =   $disc_server_ip_list[0]
   $control_ifmap_user     = "${ifmap_username}.control"
   $control_ifmap_password = "${ifmap_username}.control"
   $dns_ifmap_user         = "${ifmap_username}.dns"

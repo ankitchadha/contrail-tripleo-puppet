@@ -122,7 +122,7 @@
 class tripleo::network::contrail::analyticsdatabasenew(
   $step                 = hiera('step'),
   $auth_host            = hiera('contrail::auth_host'),
-  $api_server_new       = hiera('contrail_config_new_node_ips'),
+  $api_server_new_list  = hiera('contrail_config_new_node_ips'),
   $api_port             = hiera('contrail::api_port'),
   $admin_password       = hiera('contrail::admin_password'),
   $admin_tenant_name    = hiera('contrail::admin_tenant_name'),
@@ -133,7 +133,7 @@ class tripleo::network::contrail::analyticsdatabasenew(
   $cassandra_servers    = hiera('contrail_analytics_database_new_node_ips'),
   $ca_file              = hiera('contrail::service_certificate',false),
   $cert_file            = hiera('contrail::service_certificate',false),
-  $disc_server_ip       = hiera('contrail::confignew::host_ip'),
+  $disc_server_ip_list  = hiera('contrail_config_new_node_ips'),
   $disc_server_port     = hiera('contrail::disc_server_port'),
   $host_ip              = hiera('contrail::analytics::databasenew::host_ip'),
   $host_name            = $::hostname,
@@ -142,6 +142,8 @@ class tripleo::network::contrail::analyticsdatabasenew(
   $zookeeper_server_ips = hiera('contrail_database_new_node_ips'),
 )
 {
+  $api_server_new = $api_server_new_list[0]
+  $disc_server_ip =   $disc_server_ip_list[0]
   if $auth_protocol == 'https' {
     $vnc_api_lib_config = {
       'auth' => {

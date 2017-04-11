@@ -194,7 +194,7 @@ class tripleo::network::contrail::analyticsnew(
   $admin_tenant_name          = hiera('contrail::admin_tenant_name'),
   $admin_token                = hiera('contrail::admin_token'),
   $admin_user                 = hiera('contrail::admin_user'),
-  $api_server_new             = hiera('contrail_config_new_node_ips'),
+  $api_server_new_list        = hiera('contrail_config_new_node_ips'),
   $api_port                   = hiera('contrail::api_port'),
   $auth_host                  = hiera('contrail::auth_host'),
   $auth_port                  = hiera('contrail::auth_port'),
@@ -206,7 +206,7 @@ class tripleo::network::contrail::analyticsnew(
   $cert_file                  = hiera('contrail::service_certificate',false),
   $collector_http_server_port = hiera('contrail::analyticsnew::collector_http_server_port'),
   $collector_sandesh_port     = hiera('contrail::analyticsnew::collector_sandesh_port'),
-  $disc_server_ip             = hiera('contrail::confignew::host_ip'),
+  $disc_server_ip_list        = hiera('contrail_config_new_node_ips'),
   $disc_server_port           = hiera('contrail::disc_server_port'),
   $http_server_port           = hiera('contrail::analyticsnew::http_server_port'),
   $host_ip                    = hiera('contrail::analyticsnew::host_ip'),
@@ -225,6 +225,8 @@ class tripleo::network::contrail::analyticsnew(
   $zk_server_ip               = hiera('contrail_database_new_node_ips'),
 )
 {
+  $api_server_new = $api_server_new_list[0]
+  $disc_server_ip =   $disc_server_ip_list[0]
   $cassandra_server_list_9042 = join([join($cassandra_server_list, ':9042 '),':9042'],'')
   $kafka_broker_list_9092 = join([join($kafka_broker_list, ':9092 '),':9092'],'')
   $rabbit_server_list_5672 = join([join($rabbit_server, ':5672,'),':5672'],'')

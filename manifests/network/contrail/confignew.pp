@@ -225,7 +225,7 @@ class tripleo::network::contrail::confignew(
   $admin_tenant_name      = hiera('contrail::admin_tenant_name'),
   $admin_token            = hiera('contrail::admin_token'),
   $admin_user             = hiera('contrail::admin_user'),
-  $api_server_new         = hiera('contrail::confignew::host_ip'), # We should attach to  any of the new CFGM nodes
+  $api_server_new_list    = hiera('contrail_config_new_node_ips'), # We should attach to  any of the new CFGM nodes
   $api_port               = hiera('contrail::api_port'),
   $auth                   = hiera('contrail::auth'),
   $auth_host              = hiera('contrail::auth_host'),
@@ -237,7 +237,7 @@ class tripleo::network::contrail::confignew(
   $cert_file              = hiera('contrail::service_certificate',false),
   $config_hostnames       = hiera('contrail_config_new_short_node_names'),
   $control_server_list    = hiera('contrail_control_new_node_ips'),
-  $disc_server_ip         = hiera('contrail::confignew::host_ip'),
+  $disc_server_ip_list    = hiera('contrail_config_new_node_ips'),
   $disc_server_port       = hiera('contrail::disc_server_port'),
   $host_ip                = hiera('contrail::confignew::host_ip'),
   $ifmap_password         = hiera('contrail::confignew::ifmap_password'),
@@ -260,6 +260,8 @@ class tripleo::network::contrail::confignew(
   $zk_server_ip           = hiera('contrail_database_new_node_ips'),
 )
 {
+  $api_server_new = $api_server_new_list[0]
+  $disc_server_ip =   $disc_server_ip_list[0]
   validate_ip_address($listen_ip_address)
   validate_ip_address($disc_server_ip)
   validate_ip_address($ifmap_server_ip)
