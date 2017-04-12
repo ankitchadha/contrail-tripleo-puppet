@@ -218,6 +218,7 @@ class tripleo::network::contrail::analyticsnew(
   $rabbit_user                = hiera('contrail::rabbit_user'),
   $rabbit_password            = hiera('contrail::rabbit_password'),
   $rabbit_port                = hiera('contrail::rabbit_port'),
+  $rabbit_vhost               = '/new',
   $redis_server               = hiera('contrail::analyticsnew::redis_server'),
   $redis_server_port          = hiera('contrail::analyticsnew::redis_server_port'),
   $rest_api_ip                = hiera('contrail::analyticsnew::rest_api_ip'),
@@ -280,6 +281,7 @@ class tripleo::network::contrail::analyticsnew(
           'rabbitmq_server_list' => $rabbit_server_list_5672,
           'rabbitmq_user'        => $rabbit_user,
           'rabbitmq_password'    => $rabbit_password,
+          'rabbit_vhost'          => $rabbit_vhost,
           'zk_list'              => $zk_server_ip_2181,
         },
         'DISCOVERY' => {
