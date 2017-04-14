@@ -281,7 +281,7 @@ class tripleo::network::contrail::analyticsnew(
           'rabbitmq_server_list' => $rabbit_server_list_5672,
           'rabbitmq_user'        => $rabbit_user,
           'rabbitmq_password'    => $rabbit_password,
-          'rabbit_vhost'          => $rabbit_vhost,
+          'rabbitmq_vhost'       => $rabbitmq_vhost,
           'zk_list'              => $zk_server_ip_2181,
         },
         'DISCOVERY' => {
@@ -297,7 +297,7 @@ class tripleo::network::contrail::analyticsnew(
       },
       analytics_api_config     => {
         'DEFAULTS'  => {
-          'api_server'            => "${api_server}:${api_port}",
+          'api_server'            => "${api_server_new}:${api_port}",
           'aaa_mode'              => $analytics_aaa_mode,
           'cassandra_server_list' => $cassandra_server_list_9042,
           'host_ip'               => $host_ip,
