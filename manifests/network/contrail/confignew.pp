@@ -286,11 +286,11 @@ class tripleo::network::contrail::confignew(
   $rabbit_server_list_5672 = join([join($rabbit_server, ':5672,'),':5672'],'')
   $zk_server_ip_2181 = join([join($zk_server_ip, ':2181,'),':2181'],'')
 
-  $old_db_servers_str = join($old_db_servers,",")
+  $old_db_servers_str = join($old_db_servers," ")
   $old_zk_servers_str = join($old_db_servers,",")
   $old_rabbit_servers_str = join($old_rabbit_servers,",")
   $old_control_list_str = join($old_control_list,",")
-  $cassandra_server_list_str = join($cassandra_server_list,",")
+  $cassandra_server_list_str = join($cassandra_server_list," ")
   $zk_server_ip_str = join($zk_server_ip,",")
   $rabbit_server_str = join($rabbit_server,",")
   $control_server_list_str = join($control_server_list,",")
