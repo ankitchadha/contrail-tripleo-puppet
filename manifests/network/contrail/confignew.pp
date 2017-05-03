@@ -226,21 +226,22 @@ class tripleo::network::contrail::confignew(
   $admin_token            = hiera('contrail::admin_token'),
   $admin_user             = hiera('contrail::admin_user'),
   $analytics_list         = hiera('contrail_analytics_new_node_ips'),
-  $analytics_names        = hiera('contrail_analytics_new_short_node_names'),
+  $analytics_names_1      = hiera('contrail_analytics_new_node_names'),
   $api_server_new_list    = hiera('contrail_config_new_node_ips'), # We should attach to  any of the new CFGM nodes
+  $api_server_old_list    = hiera('contrail_config_node_ips'), 
   $api_port               = hiera('contrail::api_port'),
   $auth                   = hiera('contrail::auth'),
   $auth_host              = hiera('contrail::auth_host'),
   $auth_port              = hiera('contrail::auth_port'),
   $auth_port_ssl          = hiera('contrail::auth_port_ssl'),
   $auth_protocol          = hiera('contrail::auth_protocol'),
-  $cassandra_hostnames    = hiera('contrail_database_new_short_node_names'),
+  $cassandra_hostnames_1  = hiera('contrail_database_new_node_names'),
   $cassandra_server_list  = hiera('contrail_database_new_node_ips'),
   $ca_file                = hiera('contrail::service_certificate',false),
   $cassandra_port         = 9160,
   $cert_file              = hiera('contrail::service_certificate',false),
   $config_hostnames       = hiera('contrail_config_new_short_node_names'),
-  $control_hostnames      = hiera('contrail_control_new_short_node_names'),
+  $control_hostnames_1    = hiera('contrail_control_new_node_names'),
   $control_server_list    = hiera('contrail_control_new_node_ips'),
   $disc_server_ip_list    = hiera('contrail_config_new_node_ips'),
   $disc_server_port       = hiera('contrail::disc_server_port'),
@@ -256,13 +257,16 @@ class tripleo::network::contrail::confignew(
   $linklocal_service_name = 'metadata',
   $linklocal_service_ip   = '169.254.169.254',
   $memcached_servers      = hiera('contrail::memcached_server'),
+  $old_analytics_names_1  = hiera('contrail_analytics_node_names'),
   $old_db_servers         = hiera('contrail_config_node_ips'),
   $old_zk_servers         = hiera('contrail_config_node_ips'),
   $old_zk_port            = 2181,
   $old_rabbit_servers     = hiera('rabbitmq_node_ips'),
   $old_rabbit_vhost       = '/',
   $old_control_list       = hiera('contrail_control_node_ips'),
-  $old_control_names      = hiera('contrail_control_short_node_names'),
+  $old_control_names_1    = hiera('contrail_control_node_names'),
+  $old_analytics_list     = hiera('contrail_analytics_node_ips'),
+  $os_int_vip             = hiera('keystone_public_api_vip'),
   $public_vip             = hiera('public_virtual_ip'),
   $rabbit_server          = hiera('rabbitmq_node_ips'),
   $rabbit_user            = hiera('contrail::rabbit_user'),
@@ -270,11 +274,13 @@ class tripleo::network::contrail::confignew(
   $rabbit_port            = hiera('contrail::rabbit_port'),
   $rabbit_vhost           = '/new',
   $redis_server           = hiera('contrail::confignew::redis_server'),
+  $repo_location          = '/etc/yum.repos.d/contrail-new.repo',
   $zk_port                = 2181,
   $zk_server_ip           = hiera('contrail_database_new_node_ips'),
 )
 {
   $api_server_new = $api_server_new_list[0]
+  $api_server_old = $api_server_old_list[0]
   $disc_server_ip =   $disc_server_ip_list[0]
   validate_ip_address($listen_ip_address)
   validate_ip_address($disc_server_ip)
@@ -295,6 +301,7 @@ class tripleo::network::contrail::confignew(
   $rabbit_server_str = join($rabbit_server,",")
   $control_server_list_str = join($control_server_list,",")
 
+  $old_control_names = regsubst($old_control_names_1, '\..*\.', '.', 'G')
   $config_old_quotes = map($old_control_list) |$item| {"'$item'" }
   $config_old_name_quotes = map($old_control_names) |$item| {"'$item'" }
   $config_old_hash = zip($config_old_quotes, $config_old_name_quotes)
@@ -302,6 +309,7 @@ class tripleo::network::contrail::confignew(
   $config_old_info_str1 = regsubst(regsubst(regsubst(regsubst(regsubst($config_old_info_str, '", ', '":', 'G'), '"', '', 'G'), '\[', '', 'G'), '\]', '', 'G'), ', ', ',', 'G')
   $config_old_info = "{$config_old_info_str1}"
 
+  $control_hostnames = regsubst($control_hostnames_1, '\..*\.', '.', 'G')
   $config_new_quotes = map($control_server_list) |$item| {"'$item'" }
   $config_new_name_quotes = map($control_hostnames) |$item| {"'$item'" }
   $config_new_hash = zip($config_new_quotes, $config_new_name_quotes)
@@ -309,6 +317,7 @@ class tripleo::network::contrail::confignew(
   $config_new_info_str1 = regsubst(regsubst(regsubst(regsubst(regsubst($config_new_info_str, '", ', '":', 'G'), '"', '', 'G'), '\[', '', 'G'), '\]', '', 'G'), ', ', ',', 'G')
   $config_new_info = "{$config_new_info_str1}"
 
+  $cassandra_hostnames = regsubst($cassandra_hostnames_1, '\..*\.', '.', 'G')
   $cassandra_new_quotes = map($cassandra_server_list) |$item| {"'$item'" }
   $cassandra_new_name_quotes = map($cassandra_hostnames) |$item| {"'$item'" }
   $cassandra_new_hash = zip($cassandra_new_quotes, $cassandra_new_name_quotes)
@@ -316,12 +325,21 @@ class tripleo::network::contrail::confignew(
   $cassandra_new_info_str1 = regsubst(regsubst(regsubst(regsubst(regsubst($cassandra_new_info_str, '", ', '":', 'G'), '"', '', 'G'), '\[', '', 'G'), '\]', '', 'G'), ', ', ',', 'G')
   $cassandra_new_info = "{$cassandra_new_info_str1}"
 
+  $analytics_names = regsubst($analytics_names_1, '\..*\.', '.', 'G')
   $analytics_new_quotes = map($analytics_list) |$item| {"'$item'" }
   $analytics_new_name_quotes = map($analytics_names) |$item| {"'$item'" }
   $analytics_new_hash = zip($analytics_new_quotes, $analytics_new_name_quotes)
   $analytics_new_info_str = inline_template('<%= @analytics_new_hash.to_s %>')
   $analytics_new_info_str1 = regsubst(regsubst(regsubst(regsubst(regsubst($analytics_new_info_str, '", ', '":', 'G'), '"', '', 'G'), '\[', '', 'G'), '\]', '', 'G'), ', ', ',', 'G')
   $analytics_new_info = "{$analytics_new_info_str1}"
+
+  $old_analytics_names = regsubst($old_analytics_names_1, '\..*\.', '.', 'G')
+  $analytics_old_quotes = map($old_analytics_list) |$item| {"'$item'" }
+  $analytics_old_name_quotes = map($old_analytics_names) |$item| {"'$item'" }
+  $analytics_old_hash = zip($analytics_old_quotes, $analytics_old_name_quotes)
+  $analytics_old_info_str = inline_template('<%= @analytics_old_hash.to_s %>')
+  $analytics_old_info_str1 = regsubst(regsubst(regsubst(regsubst(regsubst($analytics_old_info_str, '", ', '":', 'G'), '"', '', 'G'), '\[', '', 'G'), '\]', '', 'G'), ', ', ',', 'G')
+  $analytics_old_info = "{$analytics_old_info_str1}"
 
   $my_string_1 = inline_template('<%= @api_server_new_list.to_s %>')
   $my_string_2 = regsubst(regsubst($my_string_1, '\[', '{', 'G'), '\]', ':[\'root\',\'XXXX\']}')
@@ -426,12 +444,17 @@ class tripleo::network::contrail::confignew(
           'db_host_info'                  => $cassandra_new_info,
           'config_host_info'              => $config_new_info,
           'analytics_host_info'           => $analytics_new_info,
+          'old_analytics_host_info'       => $analytics_old_info,
           'control_host_info'             => $config_new_info,
           'admin_password'                => $admin_password,
           'admin_user'                    => $admin_user,
           'admin_tenant_name'             => $admin_tenant_name,
           'openstack_ip'                  => $auth_host,
           'new_rabbit_vhost'              => $rabbit_vhost,
+          'api_server_ip'                 => $api_server_new,
+          'v1_api_server_ip'              => $api_server_old,
+          'repo_location'                 => $repo_location,
+          'os_int_vip'                    => $os_int_vip,
         },
       },
       device_manager_config   => {
